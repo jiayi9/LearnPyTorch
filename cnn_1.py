@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
-
+from matplotlib import pyplot as plt
 
 def load_dataset():
     data_path = 'data/train/'
@@ -33,7 +33,16 @@ train_loader = torch.utils.data.DataLoader(
     shuffle=True
 )
 
+x = 0
 for i in train_loader:
-    print(i)
+    x = x + 1
 
-train_loader
+len(train_loader)
+
+x[0]
+
+plt.imshow(x[0])
+plt.imshow(x[1])
+plt.imshow(x[2])
+
+x[:,1,1]
