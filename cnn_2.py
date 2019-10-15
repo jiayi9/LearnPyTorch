@@ -14,12 +14,33 @@ batch_size = 100
 learning_rate = 0.001
 
 data_path = "C:\LV_CHAO_IMAGE\simulation_data"
+
+data_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.ToTensor()
+])
+
 train_dataset = torchvision.datasets.ImageFolder(
     root=data_path,
     #transform=torchvision.transforms.ToTensor()
-    transform=transforms.Grayscale(num_output_channels=1)
-
+    #transform=transforms.Grayscale(num_output_channels=1)
+    transform = data_transform
 )
+
+
+# data_transform = transforms.Compose([
+#         transforms.RandomSizedCrop(224),
+#         transforms.RandomHorizontalFlip(),
+#         transforms.ToTensor(),
+#         transforms.Normalize(mean=[0.485, 0.456, 0.406],
+#                              std=[0.229, 0.224, 0.225])])
+#
+# data_loader = datasets.ImageFolder(root='data/train',
+#                                            transform=data_transform)
+#
+# train_loader = torch.utils.data.DataLoader(data_loader,
+#                                              batch_size=4, shuffle=True,
+#                                              num_workers=4)
 
 
 
@@ -38,28 +59,28 @@ class ConvNet(nn.Module):
     def __init__(self, num_classes=3):
         super(ConvNet, self).__init__()
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=5, stride=1, padding=2),
+            nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=2),
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.layer2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=2),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.layer3 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=2),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.layer4 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=2),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.layer5 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=2),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.fc = nn.Linear(7 * 7 * 32, num_classes)
