@@ -4,6 +4,8 @@ Created on Wed Jan 15 09:22:35 2020
 
 @author: LUI8WX
 """
+# https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html
+# https://pytorch.org/docs/stable/autograd.html#function
 
 import torch
 
