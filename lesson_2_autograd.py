@@ -10,14 +10,19 @@ import torch
 # x -> y -> z -> out
 
 x = torch.ones(2, 2, requires_grad=True)
-x
+
+print(x.requires_grad)
 
 y = x + 2
 y
 
+print(y.requires_grad)
+
 print(y.grad_fn)
 
 z = y * y * 3
+
+print(z.requires_grad)
 
 out = z.mean()
 
@@ -155,3 +160,24 @@ print((x ** 2).requires_grad)
 with torch.no_grad():
     print((x ** 2).requires_grad)
     
+
+
+
+
+########## detach ##############
+    
+x = torch.ones(2, 2, requires_grad=True)
+
+print(x.requires_grad)
+
+y = x + 2
+y
+    
+print(x.requires_grad)
+
+x2 = x.detach()
+
+print(x2.requires_grad)
+
+# all elements are equal (x and x2)
+print(x.eq(x2).all())
