@@ -1,4 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jan 15 09:22:35 2020
+
+@author: LUI8WX
+"""
+
 import torch
+
+# x -> y -> z -> out
 
 x = torch.ones(2, 2, requires_grad=True)
 x
@@ -25,14 +34,64 @@ print(out)
 #        [27., 27.]], grad_fn=<MulBackward0>)   z = y * y * 3
 #tensor(27., grad_fn=<MeanBackward1>)         out = z.mean()
 
-# x -> y -> z -> out
 
 out.backward()
 
+#gradients of out with respect to x vector
 x.grad
 
-y.grad
 
+
+# intermediate result has no grad
+y.grad
+z.grad
+
+
+
+##########   multiply element by element #########
+x = torch.tensor([5, 3, 4])
+y = torch.tensor([5, 3, 9])
+x*y
+
+
+
+
+
+#############################################
+####    Cookup example #########
+import torch
+x = torch.tensor([3], requires_grad=True, dtype=torch.float)
+y = x*x
+y.backward()
+x.grad
+
+x = torch.tensor([3,4], requires_grad=True, dtype=torch.float)
+y = x*x
+y.backward()
+x.grad
+# RuntimeError: grad can be implicitly created only for scalar outputs
+
+x = torch.tensor([3,4], requires_grad=True, dtype=torch.float)
+y = x*x
+z1 = y.std()
+z1.backward()
+x.grad
+
+
+x = torch.tensor([3,4], requires_grad=True, dtype=torch.float)
+y = x*x*x
+z2 = y.mean()
+z2.backward()
+x.grad
+
+#(3*x^2)/2
+#3*3**2/2
+
+
+
+
+
+###########  Set requires_grad_ #############
 
 #a = torch.randn(2, 2)
 #
@@ -49,7 +108,50 @@ y.grad
 
 
 
-# multiply element by element
-x = torch.tensor([5, 3, 4])
-y = torch.tensor([5, 3, 9])
-x*y
+
+#########   element by element grad  ##########  
+
+x = torch.randn(3, requires_grad=True)
+
+y = x * 2
+while y.data.norm() < 1000:
+    y = y * 2
+
+print(y)
+
+v = torch.tensor([0.1, 1.0, 0.0001], dtype=torch.float)
+y.backward(v)
+
+x.grad
+
+
+# my example 
+# element by element gradient
+x = torch.tensor([3,4], requires_grad=True, dtype=torch.float)
+y = x*x
+v = torch.tensor([2,3], dtype = torch.float)
+y.backward(v)
+x.grad
+
+x = torch.tensor([3,4], requires_grad=True, dtype=torch.float)
+y = x*x
+v = torch.tensor([1,1], dtype = torch.float)
+y.backward(v)
+x.grad
+
+
+2*3*2
+2*4*3
+
+
+
+
+
+###########  Specify NO grad!  #############
+
+print(x.requires_grad)
+print((x ** 2).requires_grad)
+
+with torch.no_grad():
+    print((x ** 2).requires_grad)
+    
