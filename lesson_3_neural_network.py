@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jan 19 10:21:19 2020
+
+@author: LUI8WX
+"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -49,9 +56,23 @@ def num_flat_features( x):
         return num_features
 
 
-input = torch.randn(1, 1, 32, 32)
+
 
 from matplotlib import pyplot as plt
+
+input = torch.randn(32, 32)
+
+plt.imshow(input)
+
+input = torch.randn(32, 32, 3)
+
+plt.imshow(input)
+
+input = torch.randn(1, 3, 32, 32)
+
+
+
+
 
 #xnp = input.numpy()[0][0]
 #xnp.shape
@@ -139,7 +160,12 @@ input = torch.randn(1, 1, 32, 32)
 out = net(input)
 print(out)
 net.zero_grad()
+
+# because not a scalar
 out.backward(torch.randn(1, 10))
+
+out.backward()
+#RuntimeError: grad can be implicitly created only for scalar outputs
 
 # nSamples x nChannels x Height x Width
 
@@ -187,7 +213,7 @@ loss.backward()
 print('conv1.bias.grad after backward')
 print(net.conv1.bias.grad)
 
-
+# RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed. Specify retain_graph=True when calling backward the first time.
 
 
 #######################  Update the weights  ################################
@@ -198,6 +224,27 @@ print(net.conv1.bias.grad)
 learning_rate = 0.01
 for f in net.parameters():
     f.data.sub_(f.grad.data * learning_rate)
+
+
+for f in net.parameters():
+    print(f)
+    
+x = list(net.parameters())[0]    
+
+import torch.optim as optim
+
+# subtraction
+x.data.sub_(0.1)
+
+x.data.add_(0.1)
+
+
+
+
+x.grad.data
+
+
+
 
 
 import torch.optim as optim
@@ -212,7 +259,7 @@ loss = criterion(output, target)
 loss.backward()
 optimizer.step()    # Does the update
 
-
+list(net.parameters())[0]
 
 
 
