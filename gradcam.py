@@ -6,10 +6,6 @@ from torch.autograd import Function
 from torchvision import models
 import matplotlib.pyplot as plt
 
-
-
-
-
 class FeatureExtractor():
     """ Class for extracting activations and 
     registering gradients from targetted intermediate layers """
@@ -235,21 +231,24 @@ def deprocess_image(img):
     return np.uint8(img*255)
 
 
-if True
-    model = torch.load("C:/daten/resnet_101_on_CRN_2")
+if True:
+    
+    MODEL_PATH = "C:/daten/resnet_101_on_CRN_2"
+    TARGET_INDEX = None
+    IMAGE_PATH = "D:/vision/Test_CRN_cls/CRN/Flake/2019.02.28.16.40.55_L_1.bmp"
+    
+    model = torch.load(MODEL_PATH)
     grad_cam = GradCam(model=model, feature_module=model.layer4, target_layer_names=["2"], use_cuda= True)
 
-    img = cv2.imread("D:/vision/Test_CRN_cls/CRN/Flake/2019.02.28.16.40.55_L_1.bmp", 1)
-    #img = cv2.imread("D:/vision/Test_CRN_cls/CRN/Flake/2019.02.28.16.40.59_L_1.bmp", 1)
-    #img = cv2.imread("D:/vision/Test_CRN_cls/CRN/Flake/2020.02.28.13.57.38_L_1.bmp", 1)
+    img = cv2.imread(IMAGE_PATH, 1)
     
     # Why normalize 
     img = np.float32(cv2.resize(img, (224, 224))) / 255
     
     # None: decide yourself
     input = preprocess_image(img)
-    target_index = None
-    mask = grad_cam(input, 0)
+    target_index = TARGET_INDEX
+    mask = grad_cam(input, target_index)
     
     #show_cam_on_image(img, mask)
     gb_model = GuidedBackpropReLUModel(model=model, use_cuda=True)
@@ -265,9 +264,9 @@ if True
     #(224, 224, 3)
 
     heatmap = cv2.applyColorMap(np.uint8(255 * mask), cv2.COLORMAP_JET)
-    np.unique(heatmap, return_counts = True)
-    
     heatmap = np.float32(heatmap) / 255
+
+    #print(np.unique(heatmap, return_counts = True))
     
     heatmap[heatmap > 0.5] = 1
     heatmap[heatmap <= 0.5] = 0
