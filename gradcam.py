@@ -311,3 +311,23 @@ if True:
     plt.show()
     
     plt.imshow(img + heatmap)
+
+    
+    
+    
+    
+    
+    
+    fig = plt.figure(frameon=False)
+    fig.set_size_inches(4,4)
+    ax = plt.Axes(fig, [0., 0., 1., 1.])
+    ax.set_axis_off()
+    fig.add_axes(ax)
+    ax.imshow(img, aspect='auto')
+    ax.imshow(heatmap[:,:,2], aspect='auto', alpha = 0.5)
+    fig.savefig('C:/daten/plot.png', dpi=300, bbox_inches='tight')
+    
+    
+    plt.imshow(img)
+    plt.imshow(heatmap[:,:,2], alpha = 0.5)
+    plt.savefig('C:/daten/plot.png', dpi=600, bbox_inches='tight',  pad_inches=0)
